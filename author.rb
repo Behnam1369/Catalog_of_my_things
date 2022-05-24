@@ -1,11 +1,15 @@
 class Author
+  attr_accessor :name
+  attr_reader :id
+
   def initialize(id, name)
     @id = id
     @name = name
     @items = []
   end
 
-  add_item(item)
-  item.author = self
-  @items << item
+  def add_item(item)
+    item.author = self
+    @items << item
+  end
 end
