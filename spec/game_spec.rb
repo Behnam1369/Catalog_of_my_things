@@ -12,8 +12,4 @@ describe Game do
   it 'should have specific id' do
     expect(@game.id).not_to eq(15)
   end
-
-  it 'should check if it could be archived' do
-    expect(@game.can_be_archived?).to be false
-  end
 end
