@@ -1,8 +1,9 @@
 require 'date'
+require_relative 'label'
 
 class Item
   attr_reader :id, :archived
-  attr_accessor :publish_date, :genre
+  attr_accessor :publish_date, :label, :genre
 
   def initialize(id, publish_date, archived: false)
     @id = id
