@@ -8,7 +8,6 @@ class Item
     @id = id
     @publish_date = Date.parse(publish_date)
     @archived = archived
-    @genre = nil
   end
 
   def move_to_archive
