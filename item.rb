@@ -2,12 +2,13 @@ require 'date'
 
 class Item
   attr_reader :id, :archived
-  attr_accessor :publish_date
+  attr_accessor :publish_date, :genre
 
   def initialize(id, publish_date, archived: false)
     @id = id
     @publish_date = Date.parse(publish_date)
     @archived = archived
+    @genre = nil
   end
 
   def move_to_archive
