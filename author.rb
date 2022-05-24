@@ -1,10 +1,11 @@
 class Author
-  attr_accessor :name
+  attr_accessor :first_name, :last_name
   attr_reader :id
 
-  def initialize(id, name)
+  def initialize(id, first_name, last_name)
     @id = id
-    @name = name
+    @first_name = first_name
+    @last_name = last_name
     @items = []
   end
 
