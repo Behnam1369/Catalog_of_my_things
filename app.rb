@@ -1,12 +1,15 @@
+require './music_album'
+require './genre'
 require './music_album_manager'
 require './genre_manager'
-require './json_writer'
-require './json_reader'
 require './bookmanager'
 require './labelmanager'
 require './author_manager'
 require './author'
 require './game'
+require './json/music_album_json'
+require './json/book_json'
+require 'colorize'
 require 'json'
 
 class App
@@ -19,21 +22,12 @@ class App
   include AuthorManager
 
   def initialize
-    @music_albums = []
+    @music_albums = MusicAlbumJSON.new.load_data
     @genres = []
-    @books = []
+    @books = BookJSON.new.load_data
     @games = []
     @authors = []
     set_default_genres
-    load_data
-  end
-
-  def load_data
-    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
-  end
-
-  def save_data
-    File.write('data\music_albums.json', music_albums_to_json(@music_albums))
   end
 
   def run
@@ -62,7 +56,6 @@ class App
     command = gets.chomp
     if command == '0'
       puts 'Thanks for using the app. See you later'
-      save_data
     elsif command.to_i.between?(1, 9)
       op = menu.filter { |el| el['index'] == command.to_i }.first
       op['method'].call
@@ -75,6 +68,7 @@ class App
 
   def add_book
     @books << super(@books.length)
+    BookJSON.new.save_data(@books)
   end
 
   def add_game
