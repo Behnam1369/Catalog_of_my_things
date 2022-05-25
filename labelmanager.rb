@@ -1,23 +1,13 @@
 require_relative 'label'
+require 'json'
 
 module LabelManager
   def set_default_labels
-    default_labels = [
-      {
-        title: 'Artist Alliance Recording',
-        color: 'Red'
-      },
-      {
-        title: 'Independent Star Records',
-        color: 'Blue'
-      },
-      {
-        title: 'Beatnik Records',
-        color: 'Green'
-      }
-    ]
-
-    default_labels.each_with_index.map { |label, index| Label.new(index, label[:title], label[:color]) }
+    path = './data/label.json'
+    data = []
+    json = File.read(path)
+    data = JSON.parse(json) if File.exist?(path)
+    data.map { |label| Label.new(2, label['title'], label['color']) }
   end
 
   def list_labels
