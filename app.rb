@@ -4,6 +4,7 @@ require './json_writer'
 require './json_reader'
 require './bookmanager'
 require './labelmanager'
+require './author_manager'
 require './author'
 require './game'
 require 'json'
@@ -13,21 +14,15 @@ class App
 
   include BookManager
   include LabelManager
+  include AuthorManager
 
   def initialize
     @music_albums = []
     @genres = []
     @books = []
     @games = []
-    @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
+    @authors = []
     set_default_genres
-    load_data
-  end
-
-  def load_data
-    puts 'Lets retrieve data'
-    puts File.read('data\music_albums.json')
-    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
   end
 
   def save_data
@@ -152,13 +147,13 @@ class App
     end
   end
 
-  def list_all_authors
-    puts 'Listing all authors:'
-    @authors.each_with_index.map do |author, i|
-      puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
-    end
-    puts
-  end
+  # def list_all_authors
+  #   puts 'Listing all authors:'
+  #   @authors.each_with_index.map do |author, i|
+  #     puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
+  #   end
+  #   puts
+  # end
 
   def load_json(path)
     return [] unless File.exist?(path)
