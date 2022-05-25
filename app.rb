@@ -20,7 +20,7 @@ class App
       { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
       { 'index' => 6, 'caption' => 'List all authors', 'method' => nil },
       { 'index' => 7, 'caption' => 'Add a book', 'method' => nil },
-      { 'index' => 8, 'caption' => 'Add a music album', 'method' => nil },
+      { 'index' => 8, 'caption' => 'Add a music album', 'method' => method(:add_music_album) },
       { 'index' => 9, 'caption' => 'Add a game', 'method' => nil },
       { 'index' => 0, 'caption' => 'Exit the App', 'method' => nil }
     ]
@@ -53,5 +53,29 @@ class App
       "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " +
       "Archived: #{el.archived ? 'Yes' : 'No'} "
     end)
+  end
+
+  def add_music_album
+    last_id = @music_albums.map(&:id).max
+    id = (last_id || 0) + 1
+    print 'Please enter publish date: '
+    publish_date = gets.chomp
+    on_spotify = _on_spotify
+    music_album = MusicAlbum.new(id, publish_date, on_spotify)
+    @music_albums << music_album
+    puts 'Music album was added to the collection successfully.'
+  end
+
+  def _on_spotify
+    print 'Is this music album available on Spotify? (Y/N): '
+    answer = gets.chomp
+    if %w[Y y].include?(answer)
+      true
+    elsif %w[N n].include?(answer)
+      false
+    else
+      puts 'Invalid input, please try again.'
+      _on_spotify
+    end
   end
 end
