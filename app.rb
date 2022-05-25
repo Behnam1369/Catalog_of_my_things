@@ -1,5 +1,8 @@
 require './music_album'
 require './genre'
+require './author'
+require './game'
+require 'json'
 
 class App
   attr_reader :music_albums, :genres
@@ -7,6 +10,8 @@ class App
   def initialize
     @music_albums = []
     @genres = []
+    @games = []
+    @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
     set_default_genres
   end
 
@@ -25,13 +30,13 @@ class App
     [
       { 'index' => 1, 'caption' => 'List all books', 'method' => nil },
       { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
-      { 'index' => 3, 'caption' => 'List of games', 'method' => nil },
+      { 'index' => 3, 'caption' => 'List of games', 'method' => method(:list_all_games) },
       { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
       { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
-      { 'index' => 6, 'caption' => 'List all authors', 'method' => nil },
+      { 'index' => 6, 'caption' => 'List all authors', 'method' => method(:list_all_authors) },
       { 'index' => 7, 'caption' => 'Add a book', 'method' => nil },
       { 'index' => 8, 'caption' => 'Add a music album', 'method' => method(:add_music_album) },
-      { 'index' => 9, 'caption' => 'Add a game', 'method' => nil },
+      { 'index' => 9, 'caption' => 'Add a game', 'method' => method(:add_game) },
       { 'index' => 0, 'caption' => 'Exit the App', 'method' => nil }
     ]
   end
@@ -94,5 +99,47 @@ class App
     puts(@genres.each_with_index.map do |el, i|
       "#{i + 1}- #{el.name}"
     end)
+  end
+
+  def add_game
+    id = rand(1...100)
+    print 'Publish date? '
+    publish_date = gets.chomp
+    print 'is it multiplayer? [Y/N]'
+    multiplier = %w[Y y].include?(gets.chomp)
+    print 'when was the last time you played this game? (DATE)'
+    last_played_at = gets.chomp
+    @games << Game.new(id, publish_date, multiplier, last_played_at)
+    puts 'Game Added Successfully!'
+    puts
+  end
+
+  def list_all_games
+    if @games.empty?
+      puts 'There is no any game added yet.'
+    else
+      puts 'List of all music albums:'
+      puts(@games.each_with_index.map do |game, index|
+             "Game ID.#{index + 1} - Publish Date: #{game.publish_date} " \
+               "Is it multiplier: #{game.multiplier ? 'Yes' : 'No'} " \
+               "Archived: #{game.archived ? 'Yes' : 'No'} "
+           end)
+    end
+  end
+
+  def list_all_authors
+    puts 'Listing all authors:'
+    @authors.each_with_index.map do |author, i|
+      puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
+    end
+    puts
+  end
+
+  def load_json(path)
+    return [] unless File.exist?(path)
+    return [] if File.zero?(path)
+
+    read_path = File.read(path)
+    JSON.parse(read_path, create_additions: true)
   end
 end

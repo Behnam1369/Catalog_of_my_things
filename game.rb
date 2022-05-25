@@ -1,7 +1,7 @@
 require './item'
 
 class Game < Item
-  attr_accessor :multiplier, :last_played_at
+  attr_accessor :multiplier, :last_played_at, :publish_date
 
   def initialize(id, publish_date, multiplier, last_played_at, archived: false)
     super(id, publish_date, archived: archived)
