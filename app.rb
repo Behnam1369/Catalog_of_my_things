@@ -1,12 +1,16 @@
 require './music_album'
 require './genre'
+require './bookmanager'
 
 class App
   attr_reader :music_albums, :genres
 
+  include BookManager
+
   def initialize
     @music_albums = []
     @genres = []
+    @books = []
     set_default_genres
   end
 
@@ -29,7 +33,7 @@ class App
       { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
       { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
       { 'index' => 6, 'caption' => 'List all authors', 'method' => nil },
-      { 'index' => 7, 'caption' => 'Add a book', 'method' => nil },
+      { 'index' => 7, 'caption' => 'Add a book', 'method' => method(:add_book) },
       { 'index' => 8, 'caption' => 'Add a music album', 'method' => method(:add_music_album) },
       { 'index' => 9, 'caption' => 'Add a game', 'method' => nil },
       { 'index' => 0, 'caption' => 'Exit the App', 'method' => nil }
@@ -94,5 +98,9 @@ class App
     puts(@genres.each_with_index.map do |el, i|
       "#{i + 1}- #{el.name}"
     end)
+  end
+
+  def add_book
+    @books << super(@books.length)
   end
 end
