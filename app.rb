@@ -1,7 +1,10 @@
 require './music_album'
 require './genre'
+require './music_album_manager'
+require './genre_manager'
 require './bookmanager'
 require './labelmanager'
+require './author_manager'
 require './author'
 require './game'
 require './json/music_album_json'
@@ -12,23 +15,19 @@ require 'json'
 class App
   attr_reader :music_albums, :genres
 
+  include MusicAlbumManager
+  include GenreManager
   include BookManager
   include LabelManager
+  include AuthorManager
 
   def initialize
     @music_albums = MusicAlbumJSON.new.load_data
     @genres = []
     @books = BookJSON.new.load_data
     @games = []
-    @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
+    @authors = []
     set_default_genres
-  end
-
-  def set_default_genres
-    genre1 = Genre.new(1, 'Comedy')
-    @genres << genre1
-    genre2 = Genre.new(2, 'Thriller')
-    @genres << genre2
   end
 
   def run
@@ -67,51 +66,6 @@ class App
     end
   end
 
-  def music_album_list
-    if @music_albums.length.zero?
-      puts 'There is no music album in the collection yet.'
-    else
-      puts 'List of all music albums:'
-    end
-    puts(@music_albums.each_with_index.map do |el, index|
-      "Album No.#{index + 1} - Publish Date: #{el.publish_date} " \
-        "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " \
-        "Archived: #{el.archived ? 'Yes'.green : 'No'} "
-    end)
-  end
-
-  def add_music_album
-    last_id = @music_albums.map(&:id).max
-    id = (last_id || 0) + 1
-    print 'Please enter publish date: '
-    publish_date = gets.chomp
-    on_spotify = _on_spotify
-    music_album = MusicAlbum.new(id, publish_date, on_spotify)
-    @music_albums << music_album
-    MusicAlbumJSON.new.save_data(@music_albums)
-    puts 'Music album was added to the collection successfully.'
-  end
-
-  def _on_spotify
-    print 'Is this music album available on Spotify? (Y/N): '
-    answer = gets.chomp
-    if %w[Y y].include?(answer)
-      true
-    elsif %w[N n].include?(answer)
-      false
-    else
-      puts 'Invalid input, please try again.'
-      _on_spotify
-    end
-  end
-
-  def genre_list
-    puts 'List of genres:'
-    puts(@genres.each_with_index.map do |el, i|
-      "#{i + 1}- #{el.name}"
-    end)
-  end
-
   def add_book
     @books << super(@books.length)
     BookJSON.new.save_data(@books)
@@ -141,21 +95,5 @@ class App
                "Archived: #{game.archived ? 'Yes' : 'No'} "
            end)
     end
-  end
-
-  def list_all_authors
-    puts 'Listing all authors:'
-    @authors.each_with_index.map do |author, i|
-      puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
-    end
-    puts
-  end
-
-  def load_json(path)
-    return [] unless File.exist?(path)
-    return [] if File.zero?(path)
-
-    read_path = File.read(path)
-    JSON.parse(read_path, create_additions: true)
   end
 end
