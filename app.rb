@@ -1,11 +1,13 @@
 require './music_album'
 require './genre'
 require './bookmanager'
+require './labelmanager'
 
 class App
   attr_reader :music_albums, :genres
 
   include BookManager
+  include LabelManager
 
   def initialize
     @music_albums = []
@@ -31,7 +33,7 @@ class App
       { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
       { 'index' => 3, 'caption' => 'List of games', 'method' => nil },
       { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
-      { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
+      { 'index' => 5, 'caption' => 'List all labels', 'method' => method(:list_labels) },
       { 'index' => 6, 'caption' => 'List all authors', 'method' => nil },
       { 'index' => 7, 'caption' => 'Add a book', 'method' => method(:add_book) },
       { 'index' => 8, 'caption' => 'Add a music album', 'method' => method(:add_music_album) },
