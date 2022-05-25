@@ -1,5 +1,7 @@
 require './music_album'
 require './genre'
+require './bookmanager'
+require './labelmanager'
 require './author'
 require './game'
 require 'json'
@@ -7,9 +9,13 @@ require 'json'
 class App
   attr_reader :music_albums, :genres
 
+  include BookManager
+  include LabelManager
+
   def initialize
     @music_albums = []
     @genres = []
+    @books = []
     @games = []
     @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
     set_default_genres
@@ -28,13 +34,13 @@ class App
 
   def menu
     [
-      { 'index' => 1, 'caption' => 'List all books', 'method' => nil },
+      { 'index' => 1, 'caption' => 'List all books', 'method' => -> { list_books(@books) } },
       { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
       { 'index' => 3, 'caption' => 'List of games', 'method' => method(:list_all_games) },
       { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
-      { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
+      { 'index' => 5, 'caption' => 'List all labels', 'method' => method(:list_labels) },
       { 'index' => 6, 'caption' => 'List all authors', 'method' => method(:list_all_authors) },
-      { 'index' => 7, 'caption' => 'Add a book', 'method' => nil },
+      { 'index' => 7, 'caption' => 'Add a book', 'method' => method(:add_book) },
       { 'index' => 8, 'caption' => 'Add a music album', 'method' => method(:add_music_album) },
       { 'index' => 9, 'caption' => 'Add a game', 'method' => method(:add_game) },
       { 'index' => 0, 'caption' => 'Exit the App', 'method' => nil }
@@ -99,6 +105,10 @@ class App
     puts(@genres.each_with_index.map do |el, i|
       "#{i + 1}- #{el.name}"
     end)
+  end
+
+  def add_book
+    @books << super(@books.length)
   end
 
   def add_game
