@@ -1,5 +1,5 @@
-require './music_album'
-require './genre'
+require './music_album_manager'
+require './genre_manager'
 require './json_writer'
 require './json_reader'
 require './bookmanager'
@@ -12,6 +12,8 @@ require 'json'
 class App
   attr_reader :music_albums, :genres
 
+  include MusicAlbumManager
+  include GenreManager
   include BookManager
   include LabelManager
   include AuthorManager
@@ -23,17 +25,15 @@ class App
     @games = []
     @authors = []
     set_default_genres
+    load_data
+  end
+
+  def load_data
+    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
   end
 
   def save_data
     File.write('data\music_albums.json', music_albums_to_json(@music_albums))
-  end
-
-  def set_default_genres
-    genre1 = Genre.new(1, 'Comedy')
-    @genres << genre1
-    genre2 = Genre.new(2, 'Thriller')
-    @genres << genre2
   end
 
   def run
@@ -71,50 +71,6 @@ class App
       puts 'Wrong choice'
       options
     end
-  end
-
-  def music_album_list
-    if @music_albums.length.zero?
-      puts 'There is no music album in the collection yet.'
-    else
-      puts 'List of all music albums:'
-    end
-    puts(@music_albums.each_with_index.map do |el, index|
-      "Album No.#{index + 1} - Publish Date: #{el.publish_date} " \
-        "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " \
-        "Archived: #{el.archived ? 'Yes' : 'No'} "
-    end)
-  end
-
-  def add_music_album
-    last_id = @music_albums.map(&:id).max
-    id = (last_id || 0) + 1
-    print 'Please enter publish date: '
-    publish_date = gets.chomp
-    on_spotify = _on_spotify
-    music_album = MusicAlbum.new(id, publish_date, on_spotify)
-    @music_albums << music_album
-    puts 'Music album was added to the collection successfully.'
-  end
-
-  def _on_spotify
-    print 'Is this music album available on Spotify? (Y/N): '
-    answer = gets.chomp
-    if %w[Y y].include?(answer)
-      true
-    elsif %w[N n].include?(answer)
-      false
-    else
-      puts 'Invalid input, please try again.'
-      _on_spotify
-    end
-  end
-
-  def genre_list
-    puts 'List of genres:'
-    puts(@genres.each_with_index.map do |el, i|
-      "#{i + 1}- #{el.name}"
-    end)
   end
 
   def add_book
