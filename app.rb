@@ -1,10 +1,20 @@
 require './music_album'
+require './genre'
 
 class App
-  attr_reader :music_albums
+  attr_reader :music_albums, :genres
 
   def initialize
     @music_albums = []
+    @genres = []
+    set_default_genres
+  end
+
+  def set_default_genres
+    genre1 = Genre.new(1, 'Comedy')
+    @genres << genre1
+    genre2 = Genre.new(2, 'Thriller')
+    @genres << genre2
   end
 
   def run
@@ -16,7 +26,7 @@ class App
       { 'index' => 1, 'caption' => 'List all books', 'method' => nil },
       { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
       { 'index' => 3, 'caption' => 'List of games', 'method' => nil },
-      { 'index' => 4, 'caption' => 'List all genres', 'method' => nil },
+      { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
       { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
       { 'index' => 6, 'caption' => 'List all authors', 'method' => nil },
       { 'index' => 7, 'caption' => 'Add a book', 'method' => nil },
@@ -77,5 +87,13 @@ class App
       puts 'Invalid input, please try again.'
       _on_spotify
     end
+  end
+
+  
+  def genre_list
+    puts 'List of genres:'
+    puts(@genres.each_with_index.map do |el, i|
+      "#{i + 1}- #{el.name}"
+    end)
   end
 end
