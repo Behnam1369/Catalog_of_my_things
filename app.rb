@@ -59,9 +59,9 @@ class App
       puts 'List of all music albums:'
     end
     puts(@music_albums.each_with_index.map do |el, index|
-      "Album No.#{index + 1} - Publish Date: #{el.publish_date} " +
-      "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " +
-      "Archived: #{el.archived ? 'Yes' : 'No'} "
+      "Album No.#{index + 1} - Publish Date: #{el.publish_date} " \
+        "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " \
+        "Archived: #{el.archived ? 'Yes' : 'No'} "
     end)
   end
 
@@ -89,7 +89,6 @@ class App
     end
   end
 
-  
   def genre_list
     puts 'List of genres:'
     puts(@genres.each_with_index.map do |el, i|
