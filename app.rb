@@ -146,12 +146,4 @@ class App
            end)
     end
   end
-
-  def load_json(path)
-    return [] unless File.exist?(path)
-    return [] if File.zero?(path)
-
-    read_path = File.read(path)
-    JSON.parse(read_path, create_additions: true)
-  end
 end
