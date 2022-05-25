@@ -36,7 +36,7 @@ module BookManager
     end
 
     books.each do |book|
-      puts "Book author: #{book&.author} - Genre: #{book&.genre} - Label #{book&.label} \n"
+      print "Book: "
       puts "publish date: #{book&.publish_date} - publisher: #{book&.publisher} - cover state: #{book&.cover_state} \n"
     end
   end
