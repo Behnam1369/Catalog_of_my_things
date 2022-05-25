@@ -7,6 +7,9 @@ require './labelmanager'
 require './author_manager'
 require './author'
 require './game'
+require './json/music_album_json'
+require './json/book_json'
+require 'colorize'
 require 'json'
 
 class App
@@ -19,11 +22,12 @@ class App
   include AuthorManager
 
   def initialize
+
     @music_albums = JsonManagerMusicAlbum.new.load_data
     @genres = []
-    @books = []
+    @books = BookJSON.new.load_data
     @games = []
-    @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
+    @authors = []
   end
 
   def run
@@ -65,6 +69,7 @@ class App
 
   def add_book
     @books << super(@books.length)
+    BookJSON.new.save_data(@books)
   end
 
   def add_game

@@ -1,4 +1,5 @@
 require 'json'
+
 class JsonManager
   def initialize(path)
     @path = path
