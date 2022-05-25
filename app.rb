@@ -5,7 +5,7 @@ require './labelmanager'
 require './author'
 require './game'
 require './json/music_album_json'
-require './json/book_json.rb'
+require './json/book_json'
 require 'colorize'
 require 'json'
 
