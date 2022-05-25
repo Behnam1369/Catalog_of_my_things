@@ -1,7 +1,7 @@
+require './json/json_manager'
 require './music_album_manager'
+require './json/json_manager_music_album'
 require './genre_manager'
-require './json_writer'
-require './json_reader'
 require './bookmanager'
 require './labelmanager'
 require './author'
@@ -17,20 +17,11 @@ class App
   include LabelManager
 
   def initialize
-    @music_albums = []
+    @music_albums = JsonManagerMusicAlbum.new.load_data
     @genres = []
     @books = []
     @games = []
     @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
-    load_data
-  end
-
-  def load_data
-    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
-  end
-
-  def save_data
-    File.write('data\music_albums.json', music_albums_to_json(@music_albums))
   end
 
   def run
@@ -59,7 +50,7 @@ class App
     command = gets.chomp
     if command == '0'
       puts 'Thanks for using the app. See you later'
-      save_data
+      JsonManagerMusicAlbum.new.save_data(@music_albums)
     elsif command.to_i.between?(1, 9)
       op = menu.filter { |el| el['index'] == command.to_i }.first
       op['method'].call
