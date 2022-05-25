@@ -1,7 +1,7 @@
 require './music_album'
 require './json/json_manager'
 
-class MusicAlbumJSON < JsonManager
+class JsonManagerMusicAlbum < JsonManager
   def initialize
     super('./data/music_albums.json')
   end
@@ -22,7 +22,6 @@ class MusicAlbumJSON < JsonManager
         'archived' => el.archived
       }
     end.to_json
-
     super(json)
   end
 end

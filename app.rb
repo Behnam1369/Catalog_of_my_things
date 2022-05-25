@@ -1,6 +1,6 @@
-require './music_album'
-require './genre'
+require './json/json_manager'
 require './music_album_manager'
+require './json/json_manager_music_album'
 require './genre_manager'
 require './bookmanager'
 require './labelmanager'
@@ -22,12 +22,11 @@ class App
   include AuthorManager
 
   def initialize
-    @music_albums = MusicAlbumJSON.new.load_data
+    @music_albums = JsonManagerMusicAlbum.new.load_data
     @genres = []
     @books = BookJSON.new.load_data
     @games = []
     @authors = []
-    set_default_genres
   end
 
   def run
@@ -56,6 +55,7 @@ class App
     command = gets.chomp
     if command == '0'
       puts 'Thanks for using the app. See you later'
+      JsonManagerMusicAlbum.new.save_data(@music_albums)
     elsif command.to_i.between?(1, 9)
       op = menu.filter { |el| el['index'] == command.to_i }.first
       op['method'].call
