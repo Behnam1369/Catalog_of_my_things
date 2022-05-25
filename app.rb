@@ -1,5 +1,7 @@
 require './music_album'
 require './genre'
+require './json_writer'
+require './json_reader'
 require './bookmanager'
 require './labelmanager'
 require './author'
@@ -19,6 +21,17 @@ class App
     @games = []
     @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
     set_default_genres
+    load_data
+  end
+
+  def load_data
+    puts 'Lets retrieve data'
+    puts File.read('data\music_albums.json')
+    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
+  end
+
+  def save_data
+    File.write('data\music_albums.json', music_albums_to_json(@music_albums))
   end
 
   def set_default_genres
@@ -48,11 +61,13 @@ class App
   end
 
   def options
+    puts ''
     puts 'Please select an option by typing its number. Then press "Enter" key.'
     puts(menu.each.map { |el| "#{el['index']} - #{el['caption']}" })
     command = gets.chomp
     if command == '0'
       puts 'Thanks for using the app. See you later'
+      save_data
     elsif command.to_i.between?(1, 9)
       op = menu.filter { |el| el['index'] == command.to_i }.first
       op['method'].call
