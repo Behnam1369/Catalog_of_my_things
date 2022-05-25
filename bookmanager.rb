@@ -3,6 +3,7 @@ require_relative 'book'
 
 module BookManager
   def add_book(next_book_index)
+    publish_date = ''
     loop do
       print 'Please enter publish date: '
       publish_date = gets.chomp
@@ -11,6 +12,8 @@ module BookManager
 
     print "Please enter the book's publisher: "
     publisher = gets.chomp
+
+    cover_state_selected = nil
 
     loop do
       puts "Select the book's cover state: "
@@ -24,6 +27,18 @@ module BookManager
 
     puts 'Book added'
     Book.new(next_book_index, publish_date, publisher, cover_state)
+  end
+
+  def list_books(books)
+    if books.empty?
+      puts 'Booklist is empty'
+      return
+    end
+
+    books.each do |book|
+      puts "Book author: #{book&.author} - Genre: #{book&.genre} - Label #{book&.label} \n"
+      puts "publish date: #{book&.publish_date} - publisher: #{book&.publisher} - cover state: #{book&.cover_state} \n"
+    end
   end
 
   def date_checker(publish_date)

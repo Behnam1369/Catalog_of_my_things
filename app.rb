@@ -27,7 +27,7 @@ class App
 
   def menu
     [
-      { 'index' => 1, 'caption' => 'List all books', 'method' => nil },
+      { 'index' => 1, 'caption' => 'List all books', 'method' => -> { list_books(@books) } },
       { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
       { 'index' => 3, 'caption' => 'List of games', 'method' => nil },
       { 'index' => 4, 'caption' => 'List all genres', 'method' => method(:genre_list) },
