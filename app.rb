@@ -4,6 +4,7 @@ require './json_writer'
 require './json_reader'
 require './bookmanager'
 require './labelmanager'
+require './author_manager'
 require './author'
 require './game'
 require 'json'
@@ -15,13 +16,15 @@ class App
   include GenreManager
   include BookManager
   include LabelManager
+  include AuthorManager
 
   def initialize
     @music_albums = []
     @genres = []
     @books = []
     @games = []
-    @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
+    @authors = []
+    set_default_genres
     load_data
   end
 
@@ -98,21 +101,5 @@ class App
                "Archived: #{game.archived ? 'Yes' : 'No'} "
            end)
     end
-  end
-
-  def list_all_authors
-    puts 'Listing all authors:'
-    @authors.each_with_index.map do |author, i|
-      puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
-    end
-    puts
-  end
-
-  def load_json(path)
-    return [] unless File.exist?(path)
-    return [] if File.zero?(path)
-
-    read_path = File.read(path)
-    JSON.parse(read_path, create_additions: true)
   end
 end
