@@ -1,4 +1,12 @@
+require './music_album'
+
 class App
+  attr_reader :music_albums
+
+  def initialize
+    @music_albums = []
+  end
+
   def run
     options
   end
@@ -6,7 +14,7 @@ class App
   def menu
     [
       { 'index' => 1, 'caption' => 'List all books', 'method' => nil },
-      { 'index' => 2, 'caption' => 'List all music albums', 'method' => nil },
+      { 'index' => 2, 'caption' => 'List all music albums', 'method' => method(:music_album_list) },
       { 'index' => 3, 'caption' => 'List of games', 'method' => nil },
       { 'index' => 4, 'caption' => 'List all genres', 'method' => nil },
       { 'index' => 5, 'caption' => 'List all labels', 'method' => nil },
@@ -32,5 +40,18 @@ class App
       puts 'Wrong choice'
       options
     end
+  end
+
+  def music_album_list
+    if @music_albums.length.zero?
+      puts 'There is no music album in the collection yet.'
+    else
+      puts 'List of all music albums:'
+    end
+    puts(@music_albums.each_with_index.map do |el, index|
+      "Album No.#{index + 1} - Publish Date: #{el.publish_date} " +
+      "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " +
+      "Archived: #{el.archived ? 'Yes' : 'No'} "
+    end)
   end
 end
