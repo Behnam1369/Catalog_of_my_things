@@ -17,7 +17,7 @@ module AuthorManager
         id: '3',
         first_name: 'Barbra',
         last_name: 'Cartland'
-      },
+      }
     ]
 
     default_authors.each.map { |author| Author.new(author[:id], author[:first_name], author[:last_name]) }
@@ -25,7 +25,7 @@ module AuthorManager
 
   def list_all_authors
     puts 'Labels List:'
-    set_default_authors.each { |author| puts " ID: #{author.id} - Name: #{author.first_name + ' ' + author.last_name}" }
+    set_default_authors.each { |author| puts " ID: #{author.id} - Name: #{"#{author.first_name} #{author.last_name}"}" }
     puts ''
   end
 end

@@ -147,14 +147,6 @@ class App
     end
   end
 
-  # def list_all_authors
-  #   puts 'Listing all authors:'
-  #   @authors.each_with_index.map do |author, i|
-  #     puts "#{i + 1}- #{"#{author.first_name} #{author.last_name}"}"
-  #   end
-  #   puts
-  # end
-
   def load_json(path)
     return [] unless File.exist?(path)
     return [] if File.zero?(path)
