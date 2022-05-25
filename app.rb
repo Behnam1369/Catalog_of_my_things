@@ -22,7 +22,6 @@ class App
   include AuthorManager
 
   def initialize
-
     @music_albums = JsonManagerMusicAlbum.new.load_data
     @genres = []
     @books = BookJSON.new.load_data
