@@ -5,6 +5,7 @@ require './labelmanager'
 require './author'
 require './game'
 require './json/music_album_json'
+require './json/book_json.rb'
 require 'colorize'
 require 'json'
 
@@ -17,7 +18,7 @@ class App
   def initialize
     @music_albums = MusicAlbumJSON.new.load_data
     @genres = []
-    @books = []
+    @books = BookJSON.new.load_data
     @games = []
     @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
     set_default_genres
@@ -56,7 +57,6 @@ class App
     command = gets.chomp
     if command == '0'
       puts 'Thanks for using the app. See you later'
-      save_data
     elsif command.to_i.between?(1, 9)
       op = menu.filter { |el| el['index'] == command.to_i }.first
       op['method'].call
@@ -114,6 +114,7 @@ class App
 
   def add_book
     @books << super(@books.length)
+    BookJSON.new.save_data(@books)
   end
 
   def add_game
