@@ -9,6 +9,8 @@ class Game < Item
     @last_played_at = Date.parse(last_played_at)
   end
 
+  private
+
   def can_be_archived?
     currentdate = Date.today
     super && ((currentdate - last_played_at) / 365).to_i > 2
