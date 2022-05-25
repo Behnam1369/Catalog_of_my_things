@@ -1,11 +1,11 @@
 require './music_album'
 require './genre'
-require './json_writer'
-require './json_reader'
 require './bookmanager'
 require './labelmanager'
 require './author'
 require './game'
+require './json/music_album_json'
+require 'colorize'
 require 'json'
 
 class App
@@ -15,23 +15,12 @@ class App
   include LabelManager
 
   def initialize
-    @music_albums = []
+    @music_albums = MusicAlbumJSON.new.load_data
     @genres = []
     @books = []
     @games = []
     @authors = load_json('authors.json').map { |a| Author.new(a['id'], a['first_name'], a['last_name']) }
     set_default_genres
-    load_data
-  end
-
-  def load_data
-    puts 'Lets retrieve data'
-    puts File.read('data\music_albums.json')
-    @music_albums = json_to_music_albums(File.read('data\music_albums.json')) if File.exist? 'data\music_albums.json'
-  end
-
-  def save_data
-    File.write('data\music_albums.json', music_albums_to_json(@music_albums))
   end
 
   def set_default_genres
@@ -87,7 +76,7 @@ class App
     puts(@music_albums.each_with_index.map do |el, index|
       "Album No.#{index + 1} - Publish Date: #{el.publish_date} " \
         "Available On Spotify: #{el.on_spotify ? 'Yes' : 'No'} " \
-        "Archived: #{el.archived ? 'Yes' : 'No'} "
+        "Archived: #{el.archived ? 'Yes'.green : 'No'} "
     end)
   end
 
@@ -99,6 +88,7 @@ class App
     on_spotify = _on_spotify
     music_album = MusicAlbum.new(id, publish_date, on_spotify)
     @music_albums << music_album
+    MusicAlbumJSON.new.save_data(@music_albums)
     puts 'Music album was added to the collection successfully.'
   end
 
