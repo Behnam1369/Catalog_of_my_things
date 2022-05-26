@@ -1,3 +1,5 @@
+CREATE DATABASE catalog_of_my_things;
+
 CREATE TABLE author (
   id SERIAL PRIMARY KEY,
   first_name TEXT,
@@ -35,3 +37,8 @@ CREATE TABLE music_albums (
 	on_spotify bit
 );
 
+CREATE TABLE book (
+  item_id       INT REFERENCES item(id),
+  publisher     VARCHAR(250) NOT NULL,
+  cover_state   VARCHAR(250) NOT NULL 
+);
