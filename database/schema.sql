@@ -3,10 +3,10 @@
 > psql
 
 -- Create the database
-CREATE DATABASE vet_clinic
+CREATE DATABASE catalog_of_my_things
 
 -- Connect to the database
-\c vet_clinic
+\c catalog_of_my_things
 
 -- Create tables:
 CREATE TABLE author (
