@@ -5,10 +5,12 @@ require './genre_manager'
 require './bookmanager'
 require './labelmanager'
 require './author_manager'
+require './game_manager'
 require './author'
 require './game'
 require './json/music_album_json'
 require './json/book_json'
+require './json/game_json'
 require 'colorize'
 require 'json'
 
@@ -20,12 +22,13 @@ class App
   include BookManager
   include LabelManager
   include AuthorManager
+  include GameManager
 
   def initialize
     @music_albums = JsonManagerMusicAlbum.new.load_data
     @genres = []
     @books = BookJSON.new.load_data
-    @games = []
+    @games = GameJSON.new.load_data
     @authors = []
   end
 
@@ -69,31 +72,5 @@ class App
   def add_book
     @books << super(@books.length)
     BookJSON.new.save_data(@books)
-  end
-
-  def add_game
-    id = rand(1...100)
-    print 'Publish date? '
-    publish_date = gets.chomp
-    print 'is it multiplayer? [Y/N]'
-    multiplier = %w[Y y].include?(gets.chomp)
-    print 'when was the last time you played this game? (DATE)'
-    last_played_at = gets.chomp
-    @games << Game.new(id, publish_date, multiplier, last_played_at)
-    puts 'Game Added Successfully!'
-    puts
-  end
-
-  def list_all_games
-    if @games.empty?
-      puts 'There is no any game added yet.'
-    else
-      puts 'List of all music albums:'
-      puts(@games.each_with_index.map do |game, index|
-             "Game ID.#{index + 1} - Publish Date: #{game.publish_date} " \
-               "Is it multiplier: #{game.multiplier ? 'Yes' : 'No'} " \
-               "Archived: #{game.archived ? 'Yes' : 'No'} "
-           end)
-    end
   end
 end
