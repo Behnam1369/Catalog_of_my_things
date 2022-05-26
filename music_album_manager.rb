@@ -1,5 +1,4 @@
 require_relative 'music_album'
-require './json/music_album_json'
 
 module MusicAlbumManager
   def music_album_list

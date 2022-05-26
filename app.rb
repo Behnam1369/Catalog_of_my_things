@@ -8,10 +8,8 @@ require './author_manager'
 require './game_manager'
 require './author'
 require './game'
-require './json/music_album_json'
 require './json/book_json'
 require './json/game_json'
-require 'colorize'
 require 'json'
 
 class App
