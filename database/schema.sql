@@ -30,12 +30,6 @@ CREATE TABLE game (
   item_id INT references item(id)
 );
 
-CREATE TABLE book (
-  item_id INT REFERENCES item(id),
-  publisher VARCHAR(250) NOT NULL,
-  cover_state VARCHAR(250) NOT NULL
-);
-
 CREATE TABLE music_albums (
 	item_id INT REFERENCES item (id),	
 	on_spotify bit
