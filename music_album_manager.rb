@@ -1,4 +1,4 @@
-require_relative 'music_album'
+require './json/json_manager_music_album'
 
 module MusicAlbumManager
   def music_album_list
@@ -22,7 +22,7 @@ module MusicAlbumManager
     on_spotify = _on_spotify
     music_album = MusicAlbum.new(id, publish_date, on_spotify)
     @music_albums << music_album
-    MusicAlbumJSON.new.save_data(@music_albums)
+    JsonManagerMusicAlbum.new.save_data(@music_albums)
     puts 'Music album was added to the collection successfully.'
   end
 
