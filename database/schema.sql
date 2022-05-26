@@ -13,12 +13,12 @@ CREATE DATABASE catalog_of_my_things
 CREATE TABLE author (
     id SERIAL PRIMARY KEY,
     first_name TEXT,
-    last_name TEXT,
+    last_name TEXT
 );
 
 CREATE TABLE genre (
   id SERIAL PRIMARY KEY,
-  name NARCHAR(50)
+  name VARCHAR(50)
   );
 
 CREATE TABLE label (
@@ -33,12 +33,12 @@ publish_date DATE NOT NULL,
 archived BOOLEAN NOT NULL,
 label_id INT REFERENCES label(id),
 author_id INT REFERENCES author(id),
-genre_id INT REFERENCES genre(id),
+genre_id INT REFERENCES genre(id)
 );
 
 CREATE TABLE game (
   multiplayer VARCHAR(30) NOT NULL,
-  last_played_at DATE NOT NULL
+  last_played_at DATE NOT NULL,
   item_id INT references item(id)
 );
 
