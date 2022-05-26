@@ -6,13 +6,13 @@ module LabelManager
     default_labels = [
       {
         id: 1,
-        title: "Artist Alliance Recording",
-        color:"Red"
+        title: 'Artist Alliance Recording',
+        color: 'Red'
       },
       {
         id: 2,
-        title: "Independent Star Records",
-        color: "Blue"
+        title: 'Independent Star Records',
+        color: 'Blue'
       }
     ]
 
